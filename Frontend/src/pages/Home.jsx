@@ -1,6 +1,8 @@
 // HomePage.jsx
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "../components/AdminNavbar";
+import Navbar from "../components/Navbar";
 import "slick-carousel/slick/slick.css";
 
 const citiesData = [ // no need backend data here 
@@ -33,7 +35,7 @@ const citiesData = [ // no need backend data here
     image: "/elazig.png",
   },
 ];
-
+const userRole = localStorage.getItem("userRole");
 export default function Home() {
   const [location, setLocation] = useState("istanbul");
   const [date, setDate] = useState("");
@@ -53,6 +55,13 @@ export default function Home() {
   };
 
   return (
+
+
+
+
+
+
+
     <>
       <link href="https://fonts.googleapis.com/css2?family=Gendy:wght@400&display=swap" rel="stylesheet" />
       <style>{`
@@ -190,6 +199,9 @@ export default function Home() {
           opacity: 0; cursor: pointer; z-index: 2;
         }
       `}</style>
+            <Navbar />
+
+      {userRole === "admin" && <AdminNavbar />}
 
       <div className="container">
         <div className="top-bar" aria-label="Booking controls">

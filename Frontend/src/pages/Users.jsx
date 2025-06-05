@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { loginUser } from "../services/users";
+import { useNavigate } from "react-router-dom"; 
 
 const Users = () => {
   const [email, setEmail] = useState("");
@@ -7,23 +8,34 @@ const Users = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const navigate = useNavigate(); 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setErrorMsg("");
-  setSuccessMsg("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+    setSuccessMsg("");
 
-  try {
-    const data = await loginUser({ email, password });
-    setSuccessMsg("Login successful!");
-    console.log("Response data:", data);
-  } catch (error) {
-    setErrorMsg(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const data = await loginUser({ email, password });
+
+      localStorage.setItem("userRole", data.role);
+      localStorage.setItem("userName", data.user.name);
+
+      setSuccessMsg("Login successful!");
+      console.log("Response data:", data);
+
+      if (data.role === "admin") {
+        navigate("/admin/users");
+      } else {
+        navigate("/home");
+      }
+    } catch (error) {
+      setErrorMsg(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
