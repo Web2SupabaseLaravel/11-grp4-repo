@@ -1,12 +1,19 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
-const ReservationConfirmed = ({
-  name = "Ahmad",
-  date = "JUNE 20",
-  hour = "14:00",
-  table = 5, // لازم يكون هاد مربوط بال customer info وكمان مع اليوزر 
-  bookingNumber = 19527,
-}) => {
+const ReservationConfirmed = () => {
+  const { state } = useLocation();
+
+  const {
+    name = "Guest",
+    date = "Not Set",
+    hour = "Not Set",
+    tableNumber = "N/A",
+    seating_capacity = "N/A",
+  } = state || {};
+
+  const bookingNumber = Math.floor(10000 + Math.random() * 90000); // Random number for now
+
   return (
     <>
       <link
@@ -33,7 +40,8 @@ const ReservationConfirmed = ({
           <span>NAME: {name}</span>
           <span>DATE: {date}</span>
           <span>HOUR: {hour}</span>
-          <span>TABLE: {table}</span>
+          <span>TABLE: {tableNumber}</span>
+          <span>SEATS: {seating_capacity}</span>
         </div>
         <p
           style={{
@@ -41,7 +49,7 @@ const ReservationConfirmed = ({
             fontSize: "0.9rem",
             maxWidth: "400px",
             lineHeight: 1.3,
-            opacity: 0.5, // Adding transparency here
+            opacity: 0.5,
           }}
         >
           PLEASE CHECK YOUR EMAIL IF YOU WANT TO MODIFY YOUR RESERVATION

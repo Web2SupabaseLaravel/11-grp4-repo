@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaUsers, FaUtensils, FaCalendarAlt, FaStore } from "react-icons/fa";
+import { FaUsers, FaUtensils, FaCalendarAlt, FaStore, FaChair, FaAddressBook } from "react-icons/fa"; 
+
 
 const AdminNavbar = () => {
   return (
@@ -51,6 +52,29 @@ const AdminNavbar = () => {
           <FaStore size={18} />
           <div style={{ fontSize: "12px" }}>Status</div>
         </NavLink>
+ <NavLink
+  to="/admin/tables"
+  className="text-dark text-decoration-none text-center"
+>
+  <FaChair size={18} />
+  <div style={{ fontSize: "12px" }}>Tables</div>
+</NavLink>
+
+<NavLink
+  to="/admin/customers"
+  className="text-dark text-decoration-none text-center"
+>
+  <FaAddressBook size={18} />
+  <div style={{ fontSize: "12px" }}>Customers</div>
+</NavLink>
+
+
+
+
+
+
+
+
       </div>
     </>
   );

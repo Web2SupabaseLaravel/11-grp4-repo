@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\DiningTable;
 use Illuminate\Http\Request;
-                
-
 
 class TableController extends Controller
 {
@@ -57,5 +54,12 @@ class TableController extends Controller
     {
         DiningTable::destroy($id);
         return response()->json(null, 204);
+    }
+
+    // ✅ New method: Get tables by restaurant_id
+    public function getByRestaurant($restaurant_id)
+    {
+        $tables = DiningTable::where('restaurant_id', $restaurant_id)->get();
+        return response()->json($tables);
     }
 }

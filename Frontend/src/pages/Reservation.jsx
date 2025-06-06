@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-
+import { getTablesByRestaurantId } from "../services/diningTable";
+import { createCustomer } from "../services/customerInfo"; // عدّل المسار إذا لازم
 
 
 const TableBox = ({ table, isSelected, onSelect }) => {
@@ -15,7 +16,9 @@ const TableBox = ({ table, isSelected, onSelect }) => {
       role="button"
       tabIndex={0}
       onClick={() => status !== "reserved" && onSelect(table)}
-      onKeyDown={(e) => { if (e.key === "Enter" && status !== "reserved") onSelect(table); }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && status !== "reserved") onSelect(table);
+      }}
       title={`Table ${number} • Seats: ${seating_capacity} • ${
         status === "reserved" ? "Reserved" : "Available"
       }`}
@@ -36,8 +39,8 @@ const TableBox = ({ table, isSelected, onSelect }) => {
         boxShadow: isSelected ? "0 0 10px #f0a500" : "0 4px 8px rgba(0,0,0,0.1)",
         transition: "transform 0.2s ease, background-color 0.3s ease",
       }}
-      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
       <Icon color={borderColor} size={24} />
       <div>
@@ -70,16 +73,14 @@ const groupTablesByLocation = (tables) => {
 };
 
 const Reservation = ({ restaurantLayoutImage }) => {
-  const [date, setDate] = useState(() => {
-    const d = new Date();
-    return d.toISOString().slice(0, 10);
-  });
+  const { restaurantId } = useParams();
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [hour, setHour] = useState("18:00");
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   const generateHours = () => {
     const times = [];
@@ -90,26 +91,33 @@ const Reservation = ({ restaurantLayoutImage }) => {
     }
     return times;
   };
+
   const hours = generateHours();
 
   useEffect(() => {
-  const fetchTables = async () => {
-    try {
-      const data = await getAllTables();
-      setTables(data);
-    } catch (err) {
-      console.error("Error fetching tables:", err);
-      setError("Failed to load tables. Please try again later.");
+    const fetchTables = async () => {
+      try {
+        const data = await getTablesByRestaurantId(restaurantId);
+        setTables(data);
+      } catch (err) {
+        setError("Failed to load tables. Please try again later.");
+      }
+    };
+
+    if (restaurantId) {
+      fetchTables();
     }
-  };
-  fetchTables();
-}, []);
+  }, [restaurantId]);
 
   const groupedTables = groupTablesByLocation(tables);
 
-  
-  const handleBookNow = () => {
-  setError(""); // مسح رسالة الخطأ السابقة
+  const handleBookNow = async () => {
+  setError("");
+
+  if (!name.trim()) {
+    setError("Please enter your name.");
+    return;
+  }
 
   if (!selectedTable) {
     setError("Please select a table before booking.");
@@ -126,21 +134,34 @@ const Reservation = ({ restaurantLayoutImage }) => {
     return;
   }
 
-  // إذا كل شيء تمام ننتقل لصفحة تأكيد الحجز مع البيانات
-  navigate("/confirmed", {
-    state: {
-      date,
-      hour,
-      tableNumber: selectedTable.number,
-      seating_capacity: selectedTable.seating_capacity,
-    },
-  });
-};
+  try {
+    // أرسل البيانات إلى API
+    await createCustomer({
+      user_id: 1, // أو حسب ما بدك تعيّنه
+      Name: name,
+      notes: `Reservation for ${date} at ${hour}`,
+      preferences: `Table ${selectedTable.number}`,
+    });
 
+    // انطلق لصفحة التأكيد
+    navigate("/confirmed", {
+      state: {
+        name,
+        date,
+        hour,
+        tableNumber: selectedTable.number,
+        seating_capacity: selectedTable.seating_capacity,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    setError("There was a problem processing your reservation. Please try again.");
+  }
+};
 
   return (
     <>
-      <link
+     <link
         href="https://fonts.googleapis.com/css2?family=Gendy:wght@300&display=swap"
         rel="stylesheet"
       />
@@ -318,16 +339,12 @@ const Reservation = ({ restaurantLayoutImage }) => {
           }
         }
       `}</style>
-
       <div className="reservation-container" role="main">
         <section className="left-section" aria-label="Reservation controls">
           <h1>Reservation</h1>
-
           <div className="input-row">
             <div className="input-group">
-              <label htmlFor="date-picker" className="input-label">
-                DATE
-              </label>
+              <label htmlFor="date-picker" className="input-label">DATE</label>
               <input
                 id="date-picker"
                 type="date"
@@ -337,33 +354,29 @@ const Reservation = ({ restaurantLayoutImage }) => {
                 aria-describedby="dateHelp"
               />
             </div>
-
             <div className="input-group">
-              <label htmlFor="hour-select" className="input-label">
-                HOUR
-              </label>
-              <select
-                id="hour-select"
-                value={hour}
-                onChange={(e) => setHour(e.target.value)}
-                aria-describedby="hourHelp"
-              >
-                {hours.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-            </div>
+  <label htmlFor="name-input" className="input-label">NAME</label>
+  <input
+    id="name-input"
+    type="text"
+    value={name}
+    onChange={(e) => setName(e.target.value)}
+    placeholder="Your Name"
+    style={{
+      color: 'white',
+      backgroundColor: 'transparent',
+      border: 'none',
+      fontSize: '18px',
+      outline: 'none'
+    }}
+  />
+</div>
+
           </div>
 
           {Object.entries(groupTablesByLocation(tables)).map(
             ([location, tablesInLoc]) => (
-              <section
-                className="tables-section"
-                key={location}
-                aria-label={`${location} tables`}
-              >
+              <section className="tables-section" key={location} aria-label={`${location} tables`}>
                 <h3>{location}</h3>
                 <div className="tables-list">
                   {tablesInLoc.map((table) => (
@@ -392,11 +405,7 @@ const Reservation = ({ restaurantLayoutImage }) => {
         </section>
 
         <aside className="right-section" aria-label="Restaurant layout">
-          <img
-            src={restaurantLayoutImage}
-            alt="Restaurant layout"
-            draggable={false}
-          />
+          <img src={restaurantLayoutImage} alt="Restaurant layout" draggable={false} />
         </aside>
       </div>
     </>

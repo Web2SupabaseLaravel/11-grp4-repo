@@ -9,5 +9,5 @@ class CustomerInfo extends Model
     protected $table = 'customerinfo';
     protected $primaryKey = 'info_id';
     public $timestamps = false;
-    protected $fillable = ['user_id', 'notes', 'preferences'];
+    protected $fillable = ['user_id', 'notes', 'preferences', 'Name'];
 }

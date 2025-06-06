@@ -13,9 +13,10 @@ import AdminRestaurants from "./admin/AdminRestaurants";
 import AdminReservations from "./admin/AdminReservations";
 import AdminStatus from "./admin/AdminStatus";
 import AdminReports from "./admin/AdminReports";
+import AdminTables from "./admin/AdminTables";
+import AdminCustomers from "./admin/AdminCustomers";
 import UsersSignUp from "./pages/UsersSignUp";
 
-// هون لازم نربطهم بالداتا تبعت المطاعم بعدها الادمن بده يعدل عليهم راح نربطهم بالصفحة تبعته
 const IstanbulRestaurants = [
   { id: 2, name: "Nusr-Et Steakhouse", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" },
   { id: 3, name: "360 Istanbul", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" },
@@ -58,7 +59,7 @@ const App = () => {
         <Route path="/" element={<Users />} />
         <Route path="/signup" element={<UsersSignUp />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/reservation" element={<Reservation restaurantLayoutImage="/table.png" />} />
+        <Route path="/reservation/:restaurantId" element={<Reservation restaurantLayoutImage="/table.png" />} />
         <Route path="/confirmed" element={<Confirmed />} />
         <Route path="/istanbul" element={<Restaurants headerTitle="Istanbul Restaurants" restaurants={IstanbulRestaurants} />} />
         <Route path="/ankara" element={<Restaurants headerTitle="Ankara Restaurants" restaurants={AnkaraRestaurants} />} />
@@ -70,6 +71,8 @@ const App = () => {
         <Route path="/admin/reservations" element={<AdminReservations />} />
         <Route path="/admin/status" element={<AdminStatus />} />
         <Route path="/admin/reports" element={<AdminReports />} />
+        <Route path="/admin/tables" element={<AdminTables />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
       </Routes>
       <Footer />
     </BrowserRouter>

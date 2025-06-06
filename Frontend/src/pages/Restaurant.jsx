@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 
 const GENDY_FONT_LINK = "https://fonts.googleapis.com/css2?family=Gendy:wght@400&display=swap";
+
+
+
 
 const cities = [
   { label: "Istanbul", value: "Istanbul", coords: [41.0082, 28.9784] },
@@ -15,6 +19,7 @@ const cities = [
 
 const RestaurantPage = ({ cityRestaurantMap }) => {
   const { city, id } = useParams();
+  const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
   const [guests, setGuests] = useState(4);
   const [location, setLocation] = useState(cities[0].value);
@@ -339,7 +344,23 @@ const RestaurantPage = ({ cityRestaurantMap }) => {
             <button onClick={() => setGuests(guests + 1)} style={{ padding: "10px 14px", borderRadius: 8, background: "#3f1d0a", color: "white", border: "none", fontSize: 16, fontWeight: 700 }}>+</button>
           </div>
 
-          <a href="/reservation" style={{ backgroundColor: "#bd2031", color: "white", padding: "12px 24px", borderRadius: 8, textDecoration: "none", fontWeight: 700, fontSize: 16, textAlign: "center" }}>Book Now</a>
+         <button
+  onClick={() => navigate(`/reservation/${restaurant.id}`)}
+  style={{
+    backgroundColor: "#bd2031",
+    color: "white",
+    padding: "12px 24px",
+    borderRadius: 8,
+    border: "none",
+    fontWeight: 700,
+    fontSize: 16,
+    cursor: "pointer",
+  }}
+>
+  Book Now
+</button>
+
+
         </div>
 
         <section>
