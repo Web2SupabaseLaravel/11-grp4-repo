@@ -19,9 +19,6 @@ import UsersSignUp from "./pages/UsersSignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminNavbar from "./components/AdminNavbar";
 
-
-
-// هون لازم نربطهم بالداتا تبعت المطاعم بعدها الادمن بده يعدل عليهم راح نربطهم بالصفحة تبعته
 const IstanbulRestaurants = [
   { id: 2, name: "Nusr-Et Steakhouse", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" },
   { id: 3, name: "360 Istanbul", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" },
@@ -59,18 +56,20 @@ const cityRestaurantMap = {
 const App = () => {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Users />} />
         <Route path="/signup" element={<UsersSignUp />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/reservation" element={<Reservation restaurantLayoutImage="/table.png" />} />
+        <Route path="/reservation/:restaurantId" element={<Reservation restaurantLayoutImage="/table.png" />} />
         <Route path="/confirmed" element={<Confirmed />} />
         <Route path="/istanbul" element={<Restaurants headerTitle="Istanbul Restaurants" restaurants={IstanbulRestaurants} />} />
         <Route path="/ankara" element={<Restaurants headerTitle="Ankara Restaurants" restaurants={AnkaraRestaurants} />} />
         <Route path="/izmir" element={<Restaurants headerTitle="Izmir Restaurants" restaurants={IzmirRestaurants} />} />
         <Route path="/elazig" element={<Restaurants headerTitle="Elazig Restaurants" restaurants={ElazigRestaurants} />} />
         <Route path="/restaurant/:city/:id" element={<RestaurantPage cityRestaurantMap={cityRestaurantMap} />} />
-        
+
+
         
         <Route path="/admin/users" element={
         <ProtectedRoute allowedRoles={["admin"]}>
@@ -113,8 +112,20 @@ const App = () => {
          } />
 
 
+        <Route path="/admin/tables" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminTables />
+        </ProtectedRoute>
+         } />
+
+        <Route path="/admin/customers" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminCustomers />
+        </ProtectedRoute>
+         } />
 
         
+       
       </Routes>
       <Footer />
     </BrowserRouter>
