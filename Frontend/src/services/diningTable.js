@@ -1,57 +1,100 @@
 const API_BASE_URL = 'http://localhost:8000/api/dining-table';
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const defaultHeaders = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'X-Requested-With': 'XMLHttpRequest',
+};
+
+function withCsrf(headers = {}) {
+  const csrfToken = getCookie('XSRF-TOKEN');
+  if (csrfToken) {
+    headers['X-XSRF-TOKEN'] = decodeURIComponent(csrfToken);
+  }
+  return headers;
+}
+
+export async function initCsrf() {
+  await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+    method: 'GET',
+    credentials: 'include',
+  });
+}
+
 export async function getAllTables() {
-  const response = await fetch(API_BASE_URL);
-  if (!response.ok) throw new Error('Failed to fetch tables');
-  return response.json();
+  const res = await fetch(API_BASE_URL, {
+    method: 'GET',
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error('Failed to fetch tables');
+  return res.json();
 }
 
 export async function getTableById(id) {
-  const response = await fetch(`${API_BASE_URL}/${id}`);
-  if (!response.ok) throw new Error(`Failed to fetch table with ID: ${id}`);
-  return response.json();
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'GET',
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(`Failed to fetch table with ID: ${id}`);
+  return res.json();
 }
 
 export async function getTablesByRestaurantId(restaurantId) {
-  const response = await fetch(`http://localhost:8000/api/dining-table/by-restaurant/${restaurantId}`);
-  if (!response.ok) throw new Error('Failed to fetch tables by restaurant');
-  return response.json();
+  const res = await fetch(`${API_BASE_URL}/by-restaurant/${restaurantId}`, {
+    method: 'GET',
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error('Failed to fetch tables by restaurant');
+  return res.json();
 }
 
-
 export async function createTable(data) {
-  const response = await fetch(API_BASE_URL, {
+  await initCsrf();
+  const res = await fetch(API_BASE_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(data)
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+    body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('Failed to create table');
-  return response.json();
+  if (!res.ok) throw new Error('Failed to create table');
+  return res.json();
 }
 
 export async function updateTable(id, data) {
-  const response = await fetch(`${API_BASE_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(data)
+  await initCsrf();
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'POST',
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+    body: JSON.stringify({
+      _method: 'PUT',
+      ...data,
+    }),
   });
-  if (!response.ok) throw new Error(`Failed to update table with ID: ${id}`);
-  return response.json();
+  if (!res.ok) throw new Error(`Failed to update table with ID: ${id}`);
+  return res.json();
 }
 
 export async function deleteTable(id) {
-  const response = await fetch(`${API_BASE_URL}/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json'
-    }
+  await initCsrf();
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'POST',
+    headers: withCsrf({ ...defaultHeaders }),
+    credentials: 'include',
+    body: JSON.stringify({
+      _method: 'DELETE',
+    }),
   });
-  if (!response.ok) throw new Error(`Failed to delete table with ID: ${id}`);
-  return response.json();
+ if (res.status === 204) return true; 
+  if (!res.ok) throw new Error(`Failed to delete table with ID: ${id}`);
+  return res.json(); 
 }

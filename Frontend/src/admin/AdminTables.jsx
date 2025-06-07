@@ -35,7 +35,7 @@ const AdminTables = () => {
   const toggleStatus = async (table) => {
     try {
       const updatedStatus = table.status ? 0 : 1; // 1 = available, 0 = occupied
-      await updateTable(table.id, { status: updatedStatus });
+      await updateTable(table.table_id, { status: updatedStatus });
       setSuccess(`Table ${table.number} is now ${updatedStatus ? "available" : "occupied"}`);
       fetchTables();
     } catch (err) {
@@ -62,7 +62,7 @@ const AdminTables = () => {
         </thead>
         <tbody>
           {tables.map((t) => (
-            <tr key={t.id}>
+            <tr key={t.table_id}>
               <td>{t.number}</td>
               <td>{t.seating_capacity}</td>
               <td>{t.location || "-"}</td>
@@ -77,7 +77,7 @@ const AdminTables = () => {
               </td>
               <td>{t.restaurant_id}</td>
               <td>
-                <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(t.id)}>
+                <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(t.table_id)}>
                   Delete
                 </button>
               </td>
