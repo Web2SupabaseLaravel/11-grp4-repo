@@ -16,6 +16,8 @@ import AdminReports from "./admin/AdminReports";
 import AdminTables from "./admin/AdminTables";
 import AdminCustomers from "./admin/AdminCustomers";
 import UsersSignUp from "./pages/UsersSignUp";
+import ProtectedRoute from "./ProtectedRoute";
+import AdminNavbar from "./components/AdminNavbar";
 
 const IstanbulRestaurants = [
   { id: 2, name: "Nusr-Et Steakhouse", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" },
@@ -66,13 +68,64 @@ const App = () => {
         <Route path="/izmir" element={<Restaurants headerTitle="Izmir Restaurants" restaurants={IzmirRestaurants} />} />
         <Route path="/elazig" element={<Restaurants headerTitle="Elazig Restaurants" restaurants={ElazigRestaurants} />} />
         <Route path="/restaurant/:city/:id" element={<RestaurantPage cityRestaurantMap={cityRestaurantMap} />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/restaurants" element={<AdminRestaurants />} />
-        <Route path="/admin/reservations" element={<AdminReservations />} />
-        <Route path="/admin/status" element={<AdminStatus />} />
-        <Route path="/admin/reports" element={<AdminReports />} />
-        <Route path="/admin/tables" element={<AdminTables />} />
-        <Route path="/admin/customers" element={<AdminCustomers />} />
+
+
+        
+        <Route path="/admin/users" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminUsers />
+        </ProtectedRoute>
+         } />
+
+
+
+
+        <Route path="/admin/restaurants" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminRestaurants />
+        </ProtectedRoute>
+         } />
+
+
+
+
+        <Route path="/admin/reservations" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminReservations />
+        </ProtectedRoute>
+         } />
+
+
+        
+        <Route path="/admin/status" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminStatus />
+        </ProtectedRoute>
+         } />
+
+
+
+        <Route path="/admin/reports" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminReports />
+        </ProtectedRoute>
+         } />
+
+
+        <Route path="/admin/tables" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminTables />
+        </ProtectedRoute>
+         } />
+
+        <Route path="/admin/customers" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminCustomers />
+        </ProtectedRoute>
+         } />
+
+        
+       
       </Routes>
       <Footer />
     </BrowserRouter>
