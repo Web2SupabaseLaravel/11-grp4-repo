@@ -9,8 +9,7 @@ class CustomerInfoController extends Controller
 {
     public function index()
     {
-        $customers = CustomerInfo::all();
-        return response()->json($customers);
+        return response()->json(CustomerInfo::all());
     }
 
     public function store(Request $request)
@@ -20,22 +19,21 @@ class CustomerInfoController extends Controller
                 'user_id'     => 'required|integer',
                 'notes'       => 'required|string',
                 'preferences' => 'nullable|string',
+                'Name'        => 'required|string',
             ]);
 
             $customer = CustomerInfo::create($data);
-
             return response()->json($customer, 201);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'حدث خطأ في الخادم: ' . $e->getMessage()
+                'error' => 'Server error: ' . $e->getMessage()
             ], 500);
         }
     }
 
     public function show($id)
     {
-        $customer = CustomerInfo::findOrFail($id);
-        return response()->json($customer);
+        return response()->json(CustomerInfo::findOrFail($id));
     }
 
     public function update(Request $request, $id)
@@ -46,10 +44,10 @@ class CustomerInfoController extends Controller
             'user_id'     => 'required|integer',
             'notes'       => 'required|string',
             'preferences' => 'nullable|string',
+            'Name'        => 'required|string',
         ]);
 
         $customer->update($data);
-
         return response()->json($customer);
     }
 
