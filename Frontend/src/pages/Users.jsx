@@ -142,7 +142,7 @@ const Users = () => {
           margin-top: 10px;
         }
         .forgot-password {
-          color: #b82f38;
+          color: #C51D31;
           font-size: 13px;
           float: right;
           cursor: pointer;

@@ -104,6 +104,8 @@ export async function deleteUser(userId) {
   if (!res.ok) throw new Error(`Failed to delete user with ID ${userId}`);
 
   return res.json();
+
+  
 }
 
 export async function getCurrentUser() {

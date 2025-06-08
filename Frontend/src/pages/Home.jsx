@@ -2,7 +2,6 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../components/AdminNavbar";
-import Navbar from "../components/Navbar";
 import "slick-carousel/slick/slick.css";
 
 const citiesData = [ // no need backend data here 
@@ -199,7 +198,6 @@ export default function Home() {
           opacity: 0; cursor: pointer; z-index: 2;
         }
       `}</style>
-            <Navbar />
 
       {userRole === "admin" && <AdminNavbar />}
 
