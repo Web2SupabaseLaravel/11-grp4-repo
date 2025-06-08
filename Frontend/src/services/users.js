@@ -11,7 +11,7 @@ const defaultHeaders = {
   'Accept': 'application/json',
   'X-Requested-With': 'XMLHttpRequest',
 };
-
+    
 function withCsrf(headers = {}) {
   const csrfToken = getCookie('XSRF-TOKEN');
   if (csrfToken) {
@@ -89,6 +89,7 @@ export async function updateUser(userId, updatedData) {
 }
 
 export async function deleteUser(userId) {
+  await initCsrf();
   const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
     method: 'POST',
     headers: withCsrf({ ...defaultHeaders }),
@@ -97,8 +98,14 @@ export async function deleteUser(userId) {
       _method: 'DELETE',
     }),
   });
+
+  if (res.status === 204) return { success: true }; 
+
   if (!res.ok) throw new Error(`Failed to delete user with ID ${userId}`);
+
   return res.json();
+
+  
 }
 
 export async function getCurrentUser() {

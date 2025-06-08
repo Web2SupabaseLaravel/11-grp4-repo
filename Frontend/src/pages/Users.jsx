@@ -142,7 +142,7 @@ const Users = () => {
           margin-top: 10px;
         }
         .forgot-password {
-          color: #b82f38;
+          color: #C51D31;
           font-size: 13px;
           float: right;
           cursor: pointer;
@@ -297,7 +297,14 @@ const Users = () => {
               <input type="checkbox" id="keepSignedIn" />
               Keep me sign in
             </label>
-            <span className="forgot-password">Forgot password?</span>
+            <span
+           className="forgot-password"
+           style={{ cursor: "pointer", color: "#007bff", textDecoration: "underline" }}
+           onClick={() => navigate("/reset-password")}
+              >
+            Forgot password?
+            </span>
+
           </div>
 
           <button type="submit" className="btn-signin" disabled={loading}>

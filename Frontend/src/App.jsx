@@ -18,6 +18,7 @@ import AdminCustomers from "./admin/AdminCustomers";
 import UsersSignUp from "./pages/UsersSignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminNavbar from "./components/AdminNavbar";
+import PasswordReset from "./components/PasswordReset";
 
 const IstanbulRestaurants = [
   { id: 2, name: "Nusr-Et Steakhouse", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" },
@@ -60,6 +61,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Users />} />
         <Route path="/signup" element={<UsersSignUp />} />
+        <Route path="/reset-password" element={<PasswordReset />} />
         <Route path="/home" element={<Home />} />
         <Route path="/reservation/:restaurantId" element={<Reservation restaurantLayoutImage="/table.png" />} />
         <Route path="/confirmed" element={<Confirmed />} />
@@ -79,13 +81,11 @@ const App = () => {
 
 
 
-
         <Route path="/admin/restaurants" element={
         <ProtectedRoute allowedRoles={["admin"]}>
         <AdminRestaurants />
         </ProtectedRoute>
          } />
-
 
 
 
@@ -124,8 +124,8 @@ const App = () => {
         </ProtectedRoute>
          } />
 
-        
-       
+
+
       </Routes>
       <Footer />
     </BrowserRouter>
