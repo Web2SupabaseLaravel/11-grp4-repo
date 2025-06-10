@@ -323,4 +323,3 @@ useEffect(() => {
    
 };
 
-export default ReportsPage;

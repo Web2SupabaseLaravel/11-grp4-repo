@@ -45,6 +45,8 @@ Route::post('/dining-table', [TableController::class, 'store']);
 Route::get('/dining-table/{id}', [TableController::class, 'show']);
 Route::put('/dining-table/{id}', [TableController::class, 'update']);
 Route::delete('/dining-table/{id}', [TableController::class, 'destroy']);
+Route::get('/dining-table/by-restaurant/{restaurant_id}', [TableController::class, 'getByRestaurant']);
+
 
 //CustomerInfo
 Route::get('/customers', [CustomerInfoController::class, 'index']);
