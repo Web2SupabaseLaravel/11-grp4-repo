@@ -33,7 +33,7 @@ function ReportsPage() {
     borderRadius: "12px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     padding: "20px",
-    backgroundColor: "#fff",
+    backgroundColor: "#f9f5ec",
     fontFamily: "'Helvetica', sans-serif",
   };
 
@@ -114,7 +114,7 @@ useEffect(() => {
     
       <div
       className="container py-4"
-      style={{ paddingBottom: "70px", backgroundColor: "#faf5eb" }}
+      style={{ paddingBottom: "70px", backgroundColor: "#ffffff" }}
     >
       <h3 className="mb-4" style={headingStyle}>
         Admin Dashboard & Reports
