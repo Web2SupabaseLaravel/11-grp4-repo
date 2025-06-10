@@ -323,3 +323,4 @@ useEffect(() => {
    
 };
 
+export default AdminReports;
