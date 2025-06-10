@@ -16,22 +16,28 @@ use OpenApi\Annotations as OA;
 class ReservationController extends Controller
 {
 
-   /**
+/**
  * @OA\Get(
  *     path="/api/reservations",
- *     summary="Get all reservations",
+ *     summary="Get paginated list of reservations",
  *     tags={"Reservations"},
+ *     @OA\Parameter(
+ *         name="page",
+ *         in="query",
+ *         description="Page number for pagination",
+ *         required=false,
+ *         @OA\Schema(type="integer", default=1)
+ *     ),
  *     @OA\Response(
  *         response=200,
- *         description="List of reservations"
+ *         description="List of reservations (paginated)"
  *     )
  * )
  */
 public function index()
 {
-    return Reservation::all();
+    return Reservation::paginate(5); 
 }
-
 /**
  * @OA\Post(
  *     path="/api/reservations",
@@ -57,6 +63,15 @@ public function index()
  */
 public function store(Request $request)
 {
+    $request->validate([
+        'restaurant_id' => 'required|integer|exists:restaurants,restaurant_id',
+        'user_id' => 'required|integer|exists:users,user_id',
+        'reservation_date' => 'required|date',
+        'reservation_time' => 'required|date_format:H:i', 
+        'party_size' => 'required|integer|min:1',
+        'status' => 'required|string|in:confirmed,cancelled,modified,no-show'
+    ]);
+
     return Reservation::create($request->all());
 }
 
@@ -119,9 +134,30 @@ public function show($id)
 public function update(Request $request, $id)
 {
     $reservation = Reservation::findOrFail($id);
+    $user = auth()->user();
+
+    
+    if (
+        $user->roletype === 'Customer' &&
+        $user->user_id !== $reservation->user_id
+    ) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    
+    $request->validate([
+        'restaurant_id' => 'required|integer|exists:restaurants,restaurant_id',
+        'user_id' => 'required|integer|exists:users,user_id',
+        'reservation_date' => 'required|date',
+        'reservation_time' => 'required|date_format:H:i',
+        'party_size' => 'required|integer|min:1',
+        'status' => 'required|string|in:confirmed,cancelled,modified,no-show'
+    ]);
+
     $reservation->update($request->all());
     return $reservation;
 }
+
 
 /**
  * @OA\Delete(
@@ -144,7 +180,18 @@ public function update(Request $request, $id)
 public function destroy($id)
 {
     $reservation = Reservation::findOrFail($id);
+    $user = auth()->user();
+
+    
+    if (
+        $user->roletype === 'Customer' &&
+        $user->user_id !== $reservation->user_id
+    ) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
     $reservation->delete();
     return response()->json(null, 204);
 }
+
 }

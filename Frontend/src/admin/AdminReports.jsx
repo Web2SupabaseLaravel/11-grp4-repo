@@ -323,4 +323,4 @@ useEffect(() => {
    
 };
 
-export default AdminReports;
+export default ReportsPage;
