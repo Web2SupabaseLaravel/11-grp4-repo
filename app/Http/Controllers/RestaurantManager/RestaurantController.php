@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\RestaurantManager;
 
-
-
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
@@ -15,21 +12,22 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'restaurant_id' => 'required|integer|unique:restaurants,restaurant_id',
-            'name' => 'required|string',
-            'address' => 'nullable|string',
-            'opening_hours' => 'nullable|string',
-            'phone_number' => 'nullable|string',
-            'email' => 'nullable|email',
-            'seating_capacity' => 'nullable|integer',
-            'allowsreservationmodification' => 'required|boolean',
+            'restaurant_id'                  => 'required|integer|unique:restaurants,restaurant_id',
+            'name'                           => 'required|string',
+            'address'                        => 'nullable|string',
+            'city'                           => 'required|string',
+            'opening_hours'                  => 'nullable|string',
+            'phone_number'                   => 'nullable|string',
+            'email'                          => 'nullable|email',
+            'seating_capacity'               => 'nullable|integer',
+            'allowsreservationmodification'  => 'required|boolean',
         ]);
 
         $restaurant = Restaurant::create($validated);
 
         return response()->json([
             'message' => 'تم إضافة المطعم بنجاح',
-            'data' => $restaurant
+            'data'    => $restaurant
         ], 201);
     }
 
@@ -37,7 +35,6 @@ class RestaurantController extends Controller
     public function index()
     {
         $restaurants = Restaurant::all();
-
         return response()->json($restaurants);
     }
 
@@ -47,20 +44,21 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::findOrFail($restaurant_id);
 
         $validated = $request->validate([
-            'name' => 'sometimes|required|string',
-            'address' => 'nullable|string',
-            'opening_hours' => 'nullable|string',
-            'phone_number' => 'nullable|string',
-            'email' => 'nullable|email',
-            'seating_capacity' => 'nullable|integer',
-            'allowsreservationmodification' => 'required|boolean',
+            'name'                           => 'sometimes|required|string',
+            'address'                        => 'nullable|string',
+            'city'                           => 'sometimes|required|string',
+            'opening_hours'                  => 'nullable|string',
+            'phone_number'                   => 'nullable|string',
+            'email'                          => 'nullable|email',
+            'seating_capacity'               => 'nullable|integer',
+            'allowsreservationmodification'  => 'required|boolean',
         ]);
 
         $restaurant->update($validated);
 
         return response()->json([
             'message' => 'تم تحديث بيانات المطعم',
-            'data' => $restaurant
+            'data'    => $restaurant
         ]);
     }
 

@@ -17,6 +17,7 @@ class Restaurant extends Model
         'address',
         'opening_hours',
         'phone_number',
+        'city',
         'email',
         'seating_capacity',
         'created_at',
