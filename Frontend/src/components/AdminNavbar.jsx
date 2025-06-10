@@ -46,7 +46,7 @@ const AdminNavbar = () => {
           <div style={{ fontSize: "12px" }}>Reservations</div>
         </NavLink>
         <NavLink
-          to="/admin/status"
+          to="/admin/reports"
           className="text-dark text-decoration-none text-center"
         >
           <FaStore size={18} />

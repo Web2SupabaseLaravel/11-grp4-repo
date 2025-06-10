@@ -9,6 +9,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\GoogleAuthController;
 
 
 //users
@@ -19,6 +20,8 @@ Route::post('/google-login', [UsersController::class, 'googleLogin']); // لتس
 Route::put('/users/{user_id}', [UsersController::class, 'update']); // للتعديل على اليوزر في الادمن
 Route::delete('/users/{user_id}', [UsersController::class, 'destroy']); // لحذف اليوزر في الادمنv
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+
+
 
 
 

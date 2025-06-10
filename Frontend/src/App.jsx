@@ -13,8 +13,8 @@ import AdminRestaurants from "./admin/AdminRestaurants";
 import AdminReservations from "./admin/AdminReservations";
 import AdminStatus from "./admin/AdminStatus";
 import AdminReports from "./admin/AdminReports";
-import AdminTables from "./admin/AdminTables";
-import AdminCustomers from "./admin/AdminCustomers";
+//import AdminTables from "./admin/AdminTables";
+//import AdminCustomers from "./admin/AdminCustomers";
 import UsersSignUp from "./pages/UsersSignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminNavbar from "./components/AdminNavbar";
@@ -112,17 +112,7 @@ const App = () => {
          } />
 
 
-        <Route path="/admin/tables" element={
-        <ProtectedRoute allowedRoles={["admin"]}>
-        <AdminTables />
-        </ProtectedRoute>
-         } />
-
-        <Route path="/admin/customers" element={
-        <ProtectedRoute allowedRoles={["admin"]}>
-        <AdminCustomers />
-        </ProtectedRoute>
-         } />
+       
 
 
 

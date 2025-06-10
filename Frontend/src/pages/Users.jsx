@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { loginUser } from "../services/users";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleLogin } from "../services/users";
 import { useNavigate } from "react-router-dom"; 
 
 const Users = () => {
@@ -37,7 +39,26 @@ const Users = () => {
     }
   };
 
-
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential;
+      const data = await googleLogin({ token });
+  
+      localStorage.setItem("userRole", data.role);
+      localStorage.setItem("userName", data.user.name || "");
+  
+      setSuccessMsg("Google login successful!");
+      if (data.role === "admin") {
+        navigate("/admin/users");
+      } else {
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error("Google login failed:", err);
+      setErrorMsg("Google login failed");
+    }
+  };
+  
   return (
     <>
       <link
@@ -246,20 +267,14 @@ const Users = () => {
         <form className="login-form" onSubmit={handleSubmit}>
           <h1>Sign in</h1>
 
-          <button className="btn-google" type="button">
-             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              style={{ width: 20, height: 20 }}
-              viewBox="0 0 24 24"
-              fill="white"
-            >
-              <path d="M21.805 10.023H21V10H12v4h5.735a4.91 4.91 0 01-2.11 3.22v2.664h3.42a8.092 8.092 0 002.485-6.053 8.121 8.121 0 00-.215-3.808z" />
-              <path d="M12 22c2.7 0 4.962-.9 6.62-2.44l-3.42-2.665c-.9.6-2.04.96-3.2.96-2.46 0-4.54-1.66-5.28-3.89H3.16v2.44A9.994 9.994 0 0012 22z" />
-              <path d="M6.72 14.52a5.98 5.98 0 010-3.04V9.04H3.16v2.44a6 6 0 000 4.88l3.56-2.04z" />
-              <path d="M12 6.4c1.46 0 2.77.5 3.8 1.47l2.85-2.84C16.96 3.52 14.7 2.6 12 2.6a9.95 9.95 0 00-8.4 4.96l3.56 2.07A5.68 5.68 0 0112 6.4z" />
-            </svg>
-            Sign in with Google
-          </button>
+         <div className="btn-google" style={{ padding: 0, background: "none" }}>
+  <GoogleLogin
+    onSuccess={handleGoogleLoginSuccess}
+    onError={() => setErrorMsg("Google login failed")}
+    width="100%"
+  />
+</div>
+
 
           <div className="separator">Or, sign in with your email</div>
 
