@@ -13,14 +13,16 @@ import AdminRestaurants from "./admin/AdminRestaurants";
 import AdminReservations from "./admin/AdminReservations";
 import AdminStatus from "./admin/AdminStatus";
 import AdminReports from "./admin/AdminReports";
-//import AdminTables from "./admin/AdminTables";
-//import AdminCustomers from "./admin/AdminCustomers";
+import AdminTables from "./admin/AdminTables";
+import AdminCustomers from "./admin/AdminCustomers";
 import UsersSignUp from "./pages/UsersSignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminNavbar from "./components/AdminNavbar";
 import PasswordReset from "./components/PasswordReset";
 
 const IstanbulRestaurants = [
+    { id: 1, name: "Saray Sofrası", city: "istanbul", rating: 4.5, image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80" },
+
   { id: 2, name: "Nusr-Et Steakhouse", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" },
   { id: 3, name: "360 Istanbul", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" },
   { id: 4, name: "Sunset Grill & Bar", city: "Istanbul", rating: 4, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" },
@@ -110,6 +112,20 @@ const App = () => {
         <AdminReports />
         </ProtectedRoute>
          } />
+
+         <Route path="/admin/Tables" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminTables />
+        </ProtectedRoute>
+         } />
+
+         <Route path="/admin/Customers" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminCustomers />
+        </ProtectedRoute>
+         } />
+
+
 
 
        
