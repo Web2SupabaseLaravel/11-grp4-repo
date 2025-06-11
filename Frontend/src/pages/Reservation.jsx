@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { getTablesByRestaurantId } from "../services/diningTable";
-import { createCustomer } from "../services/customerInfo"; // عدّل المسار إذا لازم
+import { createReservation } from "../services/reservations"; // تأكد المسار يكون صحيح حسب مجلدك
+
 
 
 const TableBox = ({ table, isSelected, onSelect }) => {
@@ -135,15 +136,15 @@ const Reservation = ({ restaurantLayoutImage }) => {
   }
 
   try {
-    // أرسل البيانات إلى API
-    await createCustomer({
-      user_id: 1, // أو حسب ما بدك تعيّنه
-      Name: name,
-      notes: `Reservation for ${date} at ${hour}`,
-      preferences: `Table ${selectedTable.number}`,
-    });
+   await createReservation({
+  restaurant_id: parseInt(restaurantId),
+  user_id: 63, 
+  reservation_date: date,
+  reservation_time: hour,
+  party_size: selectedTable.seating_capacity,
+  status: "confirmed",
+});
 
-    // انطلق لصفحة التأكيد
     navigate("/confirmed", {
       state: {
         name,
