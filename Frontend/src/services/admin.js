@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://resto-seven-zeta.vercel.app';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;

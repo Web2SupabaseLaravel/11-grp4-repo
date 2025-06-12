@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://your-backend-url.vercel.app/api/customers';
+const API_BASE_URL = 'http://localhost:8000/api/customers';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
