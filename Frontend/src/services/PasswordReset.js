@@ -1,6 +1,6 @@
 // src/api/auth.js
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://your-backend-url.vercel.app/api';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -23,7 +23,7 @@ function withCsrf(headers = {}) {
 }
 
 export async function initCsrf() {
-  await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+  await fetch(`${API_BASE_URL}/sanctum/csrf-cookie`, {
     method: 'GET',
     credentials: 'include',
   });

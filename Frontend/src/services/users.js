@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://your-backend-url.vercel.app/api';
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -11,7 +11,7 @@ const defaultHeaders = {
   'Accept': 'application/json',
   'X-Requested-With': 'XMLHttpRequest',
 };
-    
+
 function withCsrf(headers = {}) {
   const csrfToken = getCookie('XSRF-TOKEN');
   if (csrfToken) {
@@ -21,7 +21,7 @@ function withCsrf(headers = {}) {
 }
 
 export async function initCsrf() {
-  await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+  await fetch(`${API_BASE_URL}/sanctum/csrf-cookie`, {
     method: 'GET',
     credentials: 'include',
   });
@@ -76,7 +76,7 @@ export async function getAllUsers() {
 
 export async function updateUser(userId, updatedData) {
   const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
-    method: 'POST',
+    method: 'POST', // using _method override
     headers: withCsrf({ ...defaultHeaders }),
     credentials: 'include',
     body: JSON.stringify({
@@ -91,7 +91,7 @@ export async function updateUser(userId, updatedData) {
 export async function deleteUser(userId) {
   await initCsrf();
   const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
-    method: 'POST',
+    method: 'POST', // using _method override
     headers: withCsrf({ ...defaultHeaders }),
     credentials: 'include',
     body: JSON.stringify({
@@ -99,13 +99,11 @@ export async function deleteUser(userId) {
     }),
   });
 
-  if (res.status === 204) return { success: true }; 
+  if (res.status === 204) return { success: true };
 
   if (!res.ok) throw new Error(`Failed to delete user with ID ${userId}`);
 
   return res.json();
-
-  
 }
 
 export async function getCurrentUser() {
