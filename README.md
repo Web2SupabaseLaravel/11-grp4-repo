@@ -16,6 +16,5 @@
 ## 🛠️ Backend (Laravel)
 
 ### 1️⃣ composer install
-### 2️⃣ .env file → ⚠️ Must be added manually (it is not pushed to GitHub)
-### 4️⃣ php artisan migrate
-### 5️⃣ php artisan serve
+### 2️⃣ php artisan migrate
+### 3️⃣ php artisan serve
